@@ -6,7 +6,7 @@ def getData(f, weights={}, category=False, test=True):
 
     # Get all names of judges
     for i, r in data.iterrows():
-        if r["Table Number"] != r["Please Enter the Table Number Once More"]: continue
+        if not test and r["Table Number"] != r["Please Enter the Table Number Once More"]: continue
         
         if r["Table Number"] not in projectScores: projectScores[r["Table Number"]] = []
         if r["Email Address"] not in judgeScores: judgeScores[r["Email Address"]] = {}
@@ -18,7 +18,7 @@ def getData(f, weights={}, category=False, test=True):
         total += r["Presentation Score"]
         # Initially 35 points
         if not test:
-            total += r["Q & A Score"] + weights.get(r["Email Address"])
+            total += r["Q & A Score"] + weights.get(r["Email Address"], 0)
             if category: total += r["Category Fit Score"] * 2 # We want this 20 points total
 
         # Add point total to project score and for judge

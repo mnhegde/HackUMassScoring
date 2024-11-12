@@ -6,13 +6,13 @@ def categories(f):
     weights, tableMap, nameMap = fileData()
 
     # Weights are for 35 points initially
-    for k in weights.keys(): weights[k] *= 60/35
+    # for k in weights.keys(): weights[k] *= 60/35
 
     # Get overall scores based on judge weights
-    projectScores, judgeScores = getData(f, weights, True, False)
+    projectScores, judgeScores = getData(f, weights, True, False, (6, 60))
 
     finalScores = []
-    for k, v in projectScores.items(): finalScores.append([k, sum(v) / len(v)])
+    for k, v in projectScores.items(): finalScores.append([k, sum(v) / 3])
 
     with open("categoryMap.json", "r") as f:
         categoryMap = json.loads(f.read())
@@ -24,9 +24,9 @@ def categories(f):
 
     for k, v in finalOutput.items():
         v.sort(key=lambda x: x[1], reverse=True)
-        res = compileData(min(20, len(v)), v, tableMap, nameMap)
-        if k == "[HACKUMASS] Best UI/UX": k = "[HACKUMASS] Best UI or UX"
-        with open(f"Category-{k}-Results.csv", "w") as f:
+        res = compileData(v, tableMap, nameMap)
+        if "/" in k: k = k.replace("/", " or ")
+        with open(f"Results/Category-{k}-Results.csv", "w") as f:
             wr = csv.writer(f, quoting=csv.QUOTE_ALL)
             wr.writerows(res)
 

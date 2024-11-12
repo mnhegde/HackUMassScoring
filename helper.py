@@ -12,19 +12,21 @@ def fileData():
     
     return weights, tableMap, nameMap
 
-def compileData(k, scores, tableMap=None, nameMap=None):
+def compileData(scores, tableMap=None, nameMap=None):
     if not tableMap or not nameMap:
         tableMap, nameMap = fileData()[1:]
 
-    res = [["Team Name", "Average Score", "Written Feedback (3 Sentences Max Please)"]]
+    k = len(scores) # min(20, len(scores)) # Number to look at in deliberation
+
+    res = [["Table Number", "Team Name", "Average Score", "Written Feedback (3 Sentences Max Please)"]]
     criteria = ["Innovation Score", "Functionality Score", "Practicality Score", "Presentation Score", "Q & A Score", "Category Fit Score", "Written Feedback (3 Sentences Max Please)"]
     for tableNum, s in scores[:k]:
         rows = tableMap[str(tableNum)]
-        newRow = [nameMap[str(tableNum)], s]
+        newRow = [tableNum, nameMap[str(tableNum)], s]
         feedback = ""
         for r in rows: 
             if type(r["Written Feedback (3 Sentences Max Please)"]) == str or not math.isnan(r["Written Feedback (3 Sentences Max Please)"]):
-                feedback += r["Written Feedback (3 Sentences Max Please)"] + "\n"
+                feedback += r["Written Feedback (3 Sentences Max Please)"] + " | "
         # for c in criteria: newRow.append(row[c])
         newRow.append(feedback)
         res.append(newRow)

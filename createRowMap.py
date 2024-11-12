@@ -1,8 +1,8 @@
 import pandas as pd
 import json
 
-# Raw data from judges
-data = pd.read_csv("Overall.csv")
+# Raw data from judges, save rows for each table number
+data = pd.read_csv("Official Data.csv")
 
 tableMap = {}
 for i, r in data.iterrows():

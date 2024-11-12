@@ -6,10 +6,10 @@ def rawCategories(fileName):
     with open("categoryMap.json", "r") as f:
         categoryMap = json.loads(f.read())
 
-    projectScores, judgeScores = getData(fileName, {}, True, False)
+    projectScores, judgeScores = getData(fileName, {}, True, False, (6, 60))
 
     finalScores = []
-    for k, v in projectScores.items(): finalScores.append([k, sum(v) / len(v)])
+    for k, v in projectScores.items(): finalScores.append([k, sum(v) / 3])
 
     with open("categoryMap.json", "r") as f:
         categoryMap = json.loads(f.read())
@@ -21,8 +21,8 @@ def rawCategories(fileName):
 
     for k, v in finalOutput.items():
         v.sort(key=lambda x: x[1], reverse=True)
-        res = compileData(min(20, len(v)), v)
-        if k == "[HACKUMASS] Best UI/UX": k = "[HACKUMASS] Best UI or UX"
-        with open(f"Raw-Category-{k}-Results.csv", "w") as f:
+        res = compileData(v)
+        if "/" in k: k = k.replace("/", " or ")
+        with open(f"Raw/Raw-Category-{k}-Results.csv", "w") as f:
             wr = csv.writer(f, quoting=csv.QUOTE_ALL)
             wr.writerows(res)
